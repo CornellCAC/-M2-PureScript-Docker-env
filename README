@@ -1,0 +1,7 @@
+This file contains our docker files for creating a Macaulay2 development image
+with PureScript and PureScript-Native build tools
+
+Based on Macaulay2 container work from
+[InteractiveShell](https://github.com/fhinkel/InteractiveShell/tree/master/docker-m2-container)
+and PureScript container work from
+[purescript-hodgepodge](https://github.com/bbarker/purescript-hodgepodge).
