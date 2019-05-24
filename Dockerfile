@@ -3,7 +3,7 @@
 # VERSION               0.0.3
 
 FROM ubuntu:18.04
-MAINTAINER InteractiveShell Team <trym2@googlegroups.com>
+MAINTAINER Brandon Barker <brandon.barker@cornell.edu>
 
 # For ssh server and up-to-date ubuntu.
 RUN apt-get update && apt-get install -yq openssh-server wget gnupg
