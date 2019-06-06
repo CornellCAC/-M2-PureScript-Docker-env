@@ -10,7 +10,7 @@
 #
 
 
-: "${IMG_NAME:=purescript-hodgepodge}"
+: "${IMG_NAME:=purescript-macaulay2}"
 : "${IMG_VER:=latest}"
 # Set this to the empty string to use locally built image:
 if ! [[ -v "DHUB_PREFIX" ]]; then
