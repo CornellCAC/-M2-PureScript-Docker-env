@@ -8,6 +8,14 @@ and PureScript container work from
 
 # Example usage
 
+## Docker Hub vs Locally Built Image
+
+To use the DockerHub image just run `./psc.sh <command>`.
+
+To build the image locally (will take a while!) do `make all`. Then to run it,
+`DHUB_PREFIX="" ./psc.sh <command>`.
+
+
 ## Installed M2 Binaries
 
 
@@ -15,7 +23,6 @@ and PureScript container work from
 ./psc.sh M2
 ```
 
-FIXME: perssion issue with home directory
 
 ## Bash shell
 
@@ -25,6 +32,24 @@ FIXME: perssion issue with home directory
 
 ## PureScript REPL (PSCi)
 
-We use `spago` to run PSCi in a spago project. A barebones project is provided
-in **FIXME**.
+Note that this is currently just for the **JavaScript** backend.
+
+We use [spago](https://github.com/spacchetti/spago) to run PSCi in a spago
+project. A barebones project is provided in `/spagoex`, so you can just do:
+
+
+```
+$ cd /spagoex/ && spago repl
+PSCi, version 0.12.5
+Type :? for help
+
+> import Prelude
+> map (\x -> x * 2) [2, 4, 6]
+[4,8,12]
+
+> :quit
+See ya!
+()
+
+```
 

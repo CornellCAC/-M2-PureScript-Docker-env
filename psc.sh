@@ -25,6 +25,7 @@ fi
 
 # Make these directories so docker (root) does not!
 mkdir -p ~/.pulp
+mkdir -p ~/.Macaulay2
 mkdir -p ~/.npm
 mkdir -p ~/.npm-packages
 mkdir -p ~/.cache
@@ -38,6 +39,7 @@ docker run --rm -ti \
        --volume "$HOME/.ssh:$HOME/.ssh:ro" \
        --volume "$HOME/.pulp:$HOME/.pulp" \
        --volume "$HOME/.cache:$HOME/.cache" \
+       --volume "$HOME/.Macaulay2:$HOME/.Macaulay2" \
        --volume "$HOME/.npmrc:$HOME/.npmrc" \
        --volume "$HOME/.npm:$HOME/.npm" \
        --volume "$HOME/.npm-packages:$HOME/.npm-packages" \

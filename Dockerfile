@@ -58,7 +58,7 @@ RUN cp -a /custom/BertiniLinux64_v${BERTINI_VERSION}/lib/* /usr/lib/
 RUN apt-get update -yq \
   && apt-get install curl gnupg -yq \
   && curl -sL https://deb.nodesource.com/setup_8.x | bash \
-  && apt-get install nodejs -yq
+  && apt-get install git nodejs -yq
 
 RUN npm install -g bower parcel-bundler pulp@12.4.2 yarn@1.15.2
 
@@ -77,6 +77,10 @@ RUN mkdir -p /opt/bin && cd /opt \
   && rm /opt/linux.tar.gz
 
 ENV PATH /opt/bin:/opt/purescript:/opt/psc-package:$PATH
+
+RUN mkdir -p /spagoex && cd /spagoex && spago init && spago build && \
+  chown -R m2user:m2user /spagoex && \
+  chmod -R 775 /spagoex
 
 RUN echo "#!/usr/bin/env bash\n\$@\n" > /opt/entrypoint && \
   chmod a+x /opt/entrypoint

@@ -6,6 +6,8 @@ all:
 		-t bbarker/purescript-macaulay2:$(VERSION) .
 	docker tag bbarker/purescript-macaulay2:$(VERSION) \
 		bbarker/purescript-macaulay2:latest
+	docker tag bbarker/purescript-macaulay2:$(VERSION) \
+		purescript-macaulay2:latest
 
 push:
 	docker push bbarker/purescript-macaulay2:$(VERSION)
