@@ -88,12 +88,18 @@ RUN mkdir -p /spagoex && cd /spagoex && spago init && spago build && \
 # Now adding PureScript Native and dependencies
 #
 
-RUN apt install build-essential -yq && apt clean
+RUN apt install build-essential libtinfo-dev -yq && apt clean
 ENV PATH /root/.local/bin:$PATH
 RUN curl -sSL https://get.haskellstack.org/ | sh
 
+RUN chown -R m2user:m2user /opt
+RUN chmod -R 775 /opt
+
+USER m2user
+
 RUN cd /opt && git clone https://github.com/andyarvanitis/purescript-native.git
-RUN cd /opt/purescript-native && stack build --dry-run
+RUN cd /opt/purescript-native && stack build --prefetch --dry-run
+RUN cd /opt/purescript-native && stack build
 
 RUN echo "#!/usr/bin/env bash\n\$@\n" > /opt/entrypoint && \
   chmod a+x /opt/entrypoint

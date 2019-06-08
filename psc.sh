@@ -9,7 +9,7 @@
 # You can find more information there about this script.
 #
 
-
+: "${CONT_NAME:=PureScriptM2}"
 : "${IMG_NAME:=purescript-macaulay2}"
 : "${IMG_VER:=latest}"
 # Set this to the empty string to use locally built image:
@@ -31,8 +31,8 @@ mkdir -p ~/.npm-packages
 mkdir -p ~/.cache
 touch ~/.pulp/github-oauth-token
 
-
-docker run --rm -ti \
+docker run --detach=true --rm -ti \
+       --name "$CONT_NAME" \
        --volume /etc/passwd:/etc/passwd:ro \
        --volume "$PWD":/wd \
        --volume "$HOME/.gitconfig:$HOME/.gitconfig:ro" \
@@ -47,7 +47,10 @@ docker run --rm -ti \
        --workdir /wd \
        -e "XDG_CONFIG_HOME=/wd/.xdg_config_home" \
        -e "XDG_DATA_HOME=/wd/.xdg_data_home" \
-       "${DHUB_PREFIX}${IMG_NAME}:${IMG_VER}" "$@"
+       "${DHUB_PREFIX}${IMG_NAME}:${IMG_VER}" "$@" \
+& (sleep 1s && docker exec --user=root "$CONT_NAME" chown "${UID}:m2user" "$HOME")
+
+docker attach "$CONT_NAME"
 
 # Add this before the last line (image name) for debugging:
 #        --entrypoint "/bin/bash" \
