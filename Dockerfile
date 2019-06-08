@@ -16,19 +16,19 @@ ENV SPAGO_DOWNLOAD_SHA1 310d2e37d459481a133df4c6d719a817f56934d6
 #
 
 # For ssh server and up-to-date ubuntu.
-RUN apt-get update && apt-get install -yq openssh-server wget gnupg
+RUN apt update && apt install -yq openssh-server wget gnupg && apt clean
 
 # gfan
-RUN apt-get install -yq gfan libglpk40
+RUN apt install -yq gfan libglpk40 && apt clean
 
 # Installing M2
 RUN echo "deb http://www.math.uiuc.edu/Macaulay2/Repositories/Ubuntu bionic main" >> /etc/apt/sources.list
 RUN wget http://www.math.uiuc.edu/Macaulay2/PublicKeys/Macaulay2-key
 RUN apt-key add Macaulay2-key
-RUN apt-get update && apt-get install -y macaulay2
+RUN apt update && apt install -y macaulay2 && apt clean
 
-# RUN apt-get install -y polymake    ## too long and big
-RUN apt-get install -yq graphviz
+# RUN apt install -y polymake    ## too long and big
+RUN apt install -yq graphviz && apt clean
 
 # M2 userland, part 1.    
 RUN useradd -m -d /home/m2user m2user
@@ -43,7 +43,7 @@ RUN (cd /custom; wget http://www.math.uic.edu/~jan/x86_64phcv${PHC_VERSION}p.tar
 RUN (cd /custom; tar zxf x86_64phcv${PHC_VERSION}p.tar.gz; mv phc /usr/bin; rm x86_64phcv${PHC_VERSION}p.tar.gz)
 # This is the only way extracting Bertini gives the right permissions.
 ENV BERTINI_VERSION 1.5.1
-RUN apt-get install -yq libmpfr6
+RUN apt install -yq libmpfr6 && apt clean
 RUN su m2user -c "/bin/bash;\
    cd /custom;\
    wget https://bertini.nd.edu/BertiniLinux64_v${BERTINI_VERSION}.tar.gz;\ 
@@ -55,10 +55,11 @@ RUN cp -a /custom/BertiniLinux64_v${BERTINI_VERSION}/lib/* /usr/lib/
 #  PureScript (JavaScript) installation - useful for tests and experimentation
 #
 
-RUN apt-get update -yq \
-  && apt-get install curl gnupg -yq \
+RUN apt update -yq \
+  && apt install curl gnupg -yq \
   && curl -sL https://deb.nodesource.com/setup_8.x | bash \
-  && apt-get install git nodejs -yq
+  && apt install git nodejs -yq \
+  && apt clean
 
 RUN npm install -g bower parcel-bundler pulp@12.4.2 yarn@1.15.2
 
@@ -81,6 +82,18 @@ ENV PATH /opt/bin:/opt/purescript:/opt/psc-package:$PATH
 RUN mkdir -p /spagoex && cd /spagoex && spago init && spago build && \
   chown -R m2user:m2user /spagoex && \
   chmod -R 775 /spagoex
+
+
+#
+# Now adding PureScript Native and dependencies
+#
+
+RUN apt install build-essential -yq && apt clean
+ENV PATH /root/.local/bin:$PATH
+RUN curl -sSL https://get.haskellstack.org/ | sh
+
+RUN cd /opt && git clone https://github.com/andyarvanitis/purescript-native.git
+RUN cd /opt/purescript-native && stack build --dry-run
 
 RUN echo "#!/usr/bin/env bash\n\$@\n" > /opt/entrypoint && \
   chmod a+x /opt/entrypoint
