@@ -1,5 +1,6 @@
 VERSION=0.0.1
 PS_VERSION=0.12.5
+PS_NATIVE_COMMIT=aa857adec6aa40edac91bcacfe4c3b7c5f1c3f2d
 
 all:
 	docker build --build-arg PS_VERSION=$(PS_VERSION) \

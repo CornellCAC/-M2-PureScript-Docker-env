@@ -7,6 +7,7 @@ MAINTAINER Brandon Barker <brandon.barker@cornell.edu>
 #   https://github.com/fhinkel/InteractiveShell/blob/master/docker-m2-container/Dockerfile
 
 ARG PS_VERSION
+ARG PS_NATIVE_COMMIT
 ENV PURESCRIPT_DOWNLOAD_SHA1 1969df7783f1e95b897f5b36ab1e12ab9cbc9166
 ENV PSC_PACKAGE_DOWNLOAD_SHA1 09e033708f412e25ff049e5a9de42438b4696a33
 ENV SPAGO_DOWNLOAD_SHA1 310d2e37d459481a133df4c6d719a817f56934d6
@@ -25,6 +26,7 @@ RUN apt install -yq gfan libglpk40 && apt clean
 RUN echo "deb http://www.math.uiuc.edu/Macaulay2/Repositories/Ubuntu bionic main" >> /etc/apt/sources.list
 RUN wget http://www.math.uiuc.edu/Macaulay2/PublicKeys/Macaulay2-key
 RUN apt-key add Macaulay2-key
+
 RUN apt update && apt install -y macaulay2 && apt clean
 
 # RUN apt install -y polymake    ## too long and big
@@ -39,8 +41,10 @@ RUN chmod -R 775 /custom
 
 # Bertini and PHCpack
 ENV PHC_VERSION 24
-RUN (cd /custom; wget http://www.math.uic.edu/~jan/x86_64phcv${PHC_VERSION}p.tar.gz)
-RUN (cd /custom; tar zxf x86_64phcv${PHC_VERSION}p.tar.gz; mv phc /usr/bin; rm x86_64phcv${PHC_VERSION}p.tar.gz)
+# Temporarily commenting out; may need to install PHCpack from a different source
+# RUN (cd /custom; wget http://www.math.uic.edu/~jan/x86_64phcv${PHC_VERSION}p.tar.gz)
+# RUN (cd /custom; tar zxf x86_64phcv${PHC_VERSION}p.tar.gz; mv phc /usr/bin; rm x86_64phcv${PHC_VERSION}p.tar.gz)
+#
 # This is the only way extracting Bertini gives the right permissions.
 ENV BERTINI_VERSION 1.5.1
 RUN apt install -yq libmpfr6 && apt clean
@@ -97,9 +101,23 @@ RUN chmod -R 775 /opt
 
 USER m2user
 
-RUN cd /opt && git clone https://github.com/andyarvanitis/purescript-native.git
-RUN cd /opt/purescript-native && stack build --prefetch --dry-run
-RUN cd /opt/purescript-native && stack build
+# Used for debugging:
+#
+# RUN cd /opt && git clone https://github.com/andyarvanitis/purescript-native.git && \
+#   git checkout ${PS_NATIVE_COMMIT}
+# RUN cd /opt/purescript-native && stack build --prefetch --dry-run
+# RUN cd /opt/purescript-native && stack build
+#
+# One-shot, lighter alternative
+#
+RUN cd /opt && git clone https://github.com/andyarvanitis/purescript-native.git && \
+  cd purescript-native && git checkout ${PS_NATIVE_COMMIT} && \
+  stack build && stack install pscpp --local-bin-path /opt/bin && \
+  stack clean --full
+
+#
+# Note that we do not delete the source files as these may be useful for perusal, etc.
+#
 
 RUN echo "#!/usr/bin/env bash\n\$@\n" > /opt/entrypoint && \
   chmod a+x /opt/entrypoint
