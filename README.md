@@ -20,6 +20,12 @@ In total, this makes for a fairly large Docker image.
 
 # Example usage
 
+## Prerequisites
+
+1. Clone the [standard library FFI](https://github.com/andyarvanitis/purescript-native-ffi).
+2. Clone the Macualy2 repository and check out branch TODO.
+3. Copy `config.sh.example` to `config.sh` and set required variables accordingly.
+
 ## Docker Hub vs Locally Built Image
 
 To use the DockerHub image just run `./psc.sh <command>`.
@@ -65,3 +71,8 @@ See ya!
 
 ```
 
+# References
+
+##  PureScript Native
+
+1. An introductory tutorial involving a [game engine](https://medium.com/@lettier/how-to-create-3d-games-with-purescript-and-cpp-faabf8f27fe6).

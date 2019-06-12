@@ -9,6 +9,8 @@
 # You can find more information there about this script.
 #
 
+source config.sh
+
 : "${CONT_NAME:=PureScriptM2}"
 : "${IMG_NAME:=purescript-macaulay2}"
 : "${IMG_VER:=latest}"
@@ -33,8 +35,9 @@ touch ~/.pulp/github-oauth-token
 
 docker run --detach=true --rm -ti \
        --name "$CONT_NAME" \
-       --volume /etc/passwd:/etc/passwd:ro \
        --volume "$PWD":/wd \
+       --volume "${PSN_FFI}:/opt/purescript-native-ffi" \
+       --volume /etc/passwd:/etc/passwd:ro \
        --volume "$HOME/.gitconfig:$HOME/.gitconfig:ro" \
        --volume "$HOME/.ssh:$HOME/.ssh:ro" \
        --volume "$HOME/.pulp:$HOME/.pulp" \

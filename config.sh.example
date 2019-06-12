@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+#
+# A copy of the standard library FFI on the host
+# (https://github.com/andyarvanitis/purescript-native-ffi)
+#
+# As we'll likely need to make adjustments, best to persist
+# outside the container:
+#
+export PSN_FFI="$HOME/workspace/purescript-native-ffi"
+

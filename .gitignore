@@ -1,3 +1,6 @@
+# modify example config.sh.example
+config.sh
+
 bower_components/
 .cache
 dist/
