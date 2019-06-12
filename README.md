@@ -71,6 +71,26 @@ See ya!
 
 ```
 
+## Building a PureScript-Native Example
+
+```
+./psc.sh bash
+b8832abb93d5a47294a61b6cd3f38a309fab0f8959bc82726125c64342a616ed
+brandon@b8832abb93d5:/wd$ cd Examples/GMP/
+brandon@b8832abb93d5:/wd/Examples/GMP$ psc-package install
+Install complete
+brandon@b8832abb93d5:/wd/Examples/GMP$ make release
+make[1]: Entering directory '/wd/Examples/GMP'
+Linking output/bin/main
+make[1]: Leaving directory '/wd/Examples/GMP'
+brandon@b8832abb93d5:/wd/Examples/GMP$ ./output/bin/main 
+Hello, World!
+```
+
+For more details, see [Getting
+Started](https://github.com/andyarvanitis/purescript-native#getting-started) in
+the PureScript-Native README.
+
 # References
 
 ##  PureScript Native
